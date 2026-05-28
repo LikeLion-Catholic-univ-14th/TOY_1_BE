@@ -12,4 +12,5 @@ import java.util.List;
 public interface ResponseRepository extends JpaRepository<Response, Long> {
     List<Response> findByMeeting(Meeting meeting);
     List<Response> findByParticipant(Participant participant);
+    List<Response> findByMeeting_MeetingId(String meetingId);
 }

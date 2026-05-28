@@ -18,7 +18,6 @@ public class ResponseController {
     public ResponseDTO submitResponse(@RequestBody ResponseDTO dto) {
         return responseService.submitResponse(dto);
     }
-
     @GetMapping("/meeting/{meetingId}")
     public List<ResponseDTO> getResponses(@PathVariable String meetingId) {
         return responseService.getResponsesByMeeting(meetingId);

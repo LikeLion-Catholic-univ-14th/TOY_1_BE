@@ -41,7 +41,7 @@ public class ResponseService {
 
     public List<ResponseDTO> getResponsesByMeeting(String meetingId) {
         Meeting meeting = meetingRepository.findById(meetingId)
-                .orElseThrow(() -> new IllegalArgumentException("Meeting not found"));
+                .orElseThrow(() -> new IllegalArgumentException("Meeting not found: " + meetingId));
         
         return responseRepository.findByMeeting(meeting).stream()
                 .map(this::convertToDTO)
