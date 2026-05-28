@@ -10,6 +10,7 @@ public class ResponseDTO {
     private Long responseId;
     private Long participantId;
     private String meetingId;
+    private String nickname; // Added nickname
     private String rawText;
     private LocalDateTime submittedAt;
 }

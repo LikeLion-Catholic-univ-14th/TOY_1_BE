@@ -27,8 +27,20 @@ public class ResponseService {
     public ResponseDTO submitResponse(ResponseDTO dto) {
         Meeting meeting = meetingRepository.findById(dto.getMeetingId())
                 .orElseThrow(() -> new IllegalArgumentException("Meeting not found"));
-        Participant participant = participantRepository.findById(dto.getParticipantId())
-                .orElseThrow(() -> new IllegalArgumentException("Participant not found"));
+
+        Participant participant;
+        if (dto.getParticipantId() != null) {
+            participant = participantRepository.findById(dto.getParticipantId())
+                    .orElseThrow(() -> new IllegalArgumentException("Participant not found"));
+        } else if (dto.getNickname() != null) {
+            // Create participant if nickname is provided but participantId is not
+            participant = new Participant();
+            participant.setMeeting(meeting);
+            participant.setNickname(dto.getNickname());
+            participant = participantRepository.save(participant);
+        } else {
+            throw new IllegalArgumentException("Either participantId or nickname must be provided");
+        }
 
         Response response = new Response();
         response.setMeeting(meeting);
@@ -53,6 +65,7 @@ public class ResponseService {
         dto.setResponseId(entity.getResponseId());
         dto.setMeetingId(entity.getMeeting().getMeetingId());
         dto.setParticipantId(entity.getParticipant().getParticipantId());
+        dto.setNickname(entity.getParticipant().getNickname()); // Added nickname to DTO
         dto.setRawText(entity.getRawText());
         dto.setSubmittedAt(entity.getSubmittedAt());
         return dto;

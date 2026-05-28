@@ -21,12 +21,22 @@ public class MeetingService {
     @Transactional
     public MeetingDTO createMeeting(MeetingDTO dto) {
         Meeting meeting = new Meeting();
-        meeting.setMeetingId(UUID.randomUUID().toString());
+        meeting.setMeetingId(generateShortId());
         meeting.setTitle(dto.getTitle());
         meeting.setMaxParticipants(dto.getMaxParticipants());
         
         Meeting saved = meetingRepository.save(meeting);
         return convertToDTO(saved);
+    }
+
+    private String generateShortId() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder sb = new StringBuilder();
+        java.util.Random random = new java.util.Random();
+        for (int i = 0; i < 8; i++) {
+            sb.append(chars.charAt(random.nextInt(chars.length())));
+        }
+        return sb.toString();
     }
 
     public MeetingDTO getMeeting(String meetingId) {
