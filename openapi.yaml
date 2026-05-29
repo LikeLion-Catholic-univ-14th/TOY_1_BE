@@ -1,0 +1,187 @@
+openapi: 3.0.1
+info:
+  title: MeetPick API 명세서
+  description: MeetPick의 API 문서입니다.
+  version: v1.0.0
+servers:
+  - url: http://localhost:8080
+    description: 로컬 서버
+paths:
+  /api/meetings:
+    post:
+      tags:
+        - Meeting
+      summary: 모임 생성
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeetingRequest'
+      responses:
+        200:
+          description: 생성 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingResponse'
+    get:
+      tags:
+        - Meeting
+      summary: 전체 모임 조회
+      responses:
+        200:
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MeetingResponse'
+  /api/meetings/{meetingId}:
+    get:
+      tags:
+        - Meeting
+      summary: 모임 상세 조회
+      parameters:
+        - name: meetingId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingResponse'
+  /api/meetings/{meetingId}/result:
+    get:
+      tags:
+        - Result
+      summary: Gemini AI 분석 결과 조회
+      description: 참여자의 응답들을 분석하여 최적의 시간을 추천합니다.
+      parameters:
+        - name: meetingId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: 분석 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultResponse'
+  /api/responses:
+    post:
+      tags:
+        - Response
+      summary: 참여자 일정 응답 제출
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResponseRequest'
+      responses:
+        200:
+          description: 제출 성공
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseDTO'
+components:
+  schemas:
+    MeetingRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: 토이 프로젝트 모임
+        maxParticipants:
+          type: integer
+          example: 6
+    MeetingResponse:
+      type: object
+      properties:
+        meetingId:
+          type: string
+          example: "aB1cD2eF"
+        title:
+          type: string
+          example: "토이 프로젝트 모임"
+        maxParticipants:
+          type: integer
+          example: 6
+        createdAT:
+          type: string
+          format: date-time
+          example: "2024-05-29T20:00:00"
+    ResponseRequest:
+      type: object
+      properties:
+        meetingId:
+          type: string
+          example: "aB1cD2eF"
+        nickname:
+          type: string
+          example: "이서연"
+        rawText:
+          type: string
+          example: "저는 월요일 저녁 7시 이후가 제일 좋아요!"
+    ResponseDTO:
+      type: object
+      properties:
+        responseId:
+          type: integer
+          example: 1
+        participantId:
+          type: integer
+          example: 101
+        meetingId:
+          type: string
+          example: "aB1cD2eF"
+        nickname:
+          type: string
+          example: "이서연"
+        rawText:
+          type: string
+          example: "저는 월요일 저녁 7시 이후가 제일 좋아요!"
+        submittedAt:
+          type: string
+          format: date-time
+          example: "2026-05-29T21:00:00"
+    ResultResponse:
+      type: object
+      properties:
+        totalResponses:
+          type: integer
+          example: 3
+        recommendedTime:
+          type: string
+          example: "6월 1일(월) 저녁 7시"
+        alternativeTime:
+          type: string
+          example: "6월 8일(월) 저녁 7시"
+        reason:
+          type: string
+          example: "가장 많은 인원(1명)이 참석 가능한 시간대입니다."
+        noticeText:
+          type: string
+          example: "모두가 모이기 좋은 월요일 저녁으로 확정될 것 같아요!"
+        isFallback:
+          type: boolean
+          example: false
+        optionStats:
+          type: array
+          items:
+            type: object
+            properties:
+              option:
+                type: string
+                example: "6월 1일 (월) 저녁 7시"
+              availableCount:
+                type: integer
+                example: 1
+
