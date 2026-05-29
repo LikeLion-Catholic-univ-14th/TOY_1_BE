@@ -1,6 +1,5 @@
 package com.example.meetpick.service;
 
-import com.example.meetpick.dto.OptionStatDto;
 import com.example.meetpick.dto.ResultResponseDTO;
 import com.example.meetpick.entity.Response;
 import com.example.meetpick.repository.ResponseRepository;
@@ -25,15 +24,13 @@ public class ResultService {
 
     public ResultResponseDTO getMeetingResult(String meetingId) {
 
-        // 1. DB에서 가져오기
+        // DB 응답 가져오기
         List<Response> responses =
                 responseRepository.findByMeeting_MeetingId(meetingId);
 
         List<String> responseTexts = responses.stream()
                 .map(Response::getRawText)
                 .toList();
-
-        List<OptionStatDto> optionStats = createDummyStats();
 
         try {
 
@@ -49,35 +46,37 @@ public class ResultService {
             ResultResponseDTO aiDto =
                     objectMapper.readValue(cleaned, ResultResponseDTO.class);
 
-            return ResultResponseDTO.builder()
-                    .totalResponses(responses.size())
-                    .optionStats(optionStats)
-                    .recommendedTime(aiDto.getRecommendedTime())
-                    .alternativeTime(aiDto.getAlternativeTime())
-                    .reason(aiDto.getReason())
-                    .noticeText(aiDto.getNoticeText())
-                    .isFallback(aiDto.isFallback())
-                    .build();
+            return aiDto;
 
         } catch (Exception e) {
 
-            return fallbackResult(responses.size(), optionStats);
+            e.printStackTrace();
+
+            return ResultResponseDTO.builder()
+                    .totalResponses(responses.size())
+                    .recommendedTime("분석 실패")
+                    .alternativeTime("없음")
+                    .reason("AI 응답 파싱 실패")
+                    .noticeText("잠시 후 다시 시도해주세요.")
+                    .isFallback(true)
+                    .optionStats(List.of())
+                    .build();
         }
     }
 
-    public String getRecommendation(
-            List<String> responsesFromDB
-    ) {
+    public String getRecommendation(List<String> responsesFromDB) {
 
         if (responsesFromDB.isEmpty()) {
 
             return """
                     {
+                      "totalResponses":0,
                       "recommendedTime":"없음",
                       "alternativeTime":"없음",
                       "reason":"응답이 없습니다.",
                       "noticeText":"아직 응답이 없어요!",
-                      "isFallback":true
+                      "isFallback":true,
+                      "optionStats":[]
                     }
                     """;
         }
@@ -86,18 +85,34 @@ public class ResultService {
                 String.join("\n", responsesFromDB);
 
         String prompt =
-                "다음 모임 응답들을 분석해서 가장 겹치는 시간을 기준으로 가장 적절한 모임 시간을 추천해줘.\n\n"
-                        + combinedResponses
-                        + "\n\n"
-                        + "반드시 JSON만 반환해.\n"
-                        + "설명 절대 붙이지 마.\n\n"
-                        + "{\n"
-                        + "\"recommendedTime\":\"\",\n"
-                        + "\"alternativeTime\":\"\",\n"
-                        + "\"reason\":\"\",\n"
-                        + "\"noticeText\":\"\",\n"
-                        + "\"isFallback\":false\n"
-                        + "}";
+                """
+                다음 모임 응답들을 분석해서
+                가장 적절한 모임 시간을 추천해줘.
+
+                응답 목록:
+                """
+                        + combinedResponses +
+                        """
+        
+                        반드시 JSON만 반환해.
+                        설명 절대 붙이지 마.
+        
+                        형식:
+                        {
+                          "totalResponses": 0,
+                          "recommendedTime": "",
+                          "alternativeTime": "",
+                          "reason": "",
+                          "noticeText": "",
+                          "isFallback": false,
+                          "optionStats": [
+                            {
+                              "option": "",
+                              "availableCount": 0
+                            }
+                          ]
+                        }
+                        """;
 
         String url =
                 "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="
@@ -141,36 +156,5 @@ public class ResultService {
                 (Map) parts.get(0);
 
         return (String) part.get("text");
-    }
-
-    private ResultResponseDTO fallbackResult(
-            int totalResponses,
-            List<OptionStatDto> optionStats
-    ) {
-
-        return ResultResponseDTO.builder()
-                .totalResponses(totalResponses)
-                .optionStats(optionStats)
-                .recommendedTime("수요일 17시")
-                .alternativeTime("목요일 18시")
-                .reason("AI 서버 지연으로 기본 추천 결과를 표시합니다.")
-                .noticeText("수요일 17시에 모임을 진행해요!")
-                .isFallback(true)
-                .build();
-    }
-
-    private List<OptionStatDto> createDummyStats() {
-
-        return List.of(
-                OptionStatDto.builder()
-                        .option("수요일 17시")
-                        .availableCount(4)
-                        .build(),
-
-                OptionStatDto.builder()
-                        .option("목요일 18시")
-                        .availableCount(3)
-                        .build()
-        );
     }
 }
