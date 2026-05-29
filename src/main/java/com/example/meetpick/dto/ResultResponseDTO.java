@@ -1,5 +1,6 @@
 package com.example.meetpick.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +27,6 @@ public class ResultResponseDTO {
     private String reason;
 
     private String noticeText;
-
+    @JsonProperty("isFallback")
     private boolean isFallback;
 }

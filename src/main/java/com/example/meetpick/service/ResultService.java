@@ -88,14 +88,24 @@ public class ResultService {
                 """
                 다음 모임 응답들을 분석해서
                 가장 적절한 모임 시간을 추천해줘.
-
+        
                 응답 목록:
                 """
                         + combinedResponses +
                         """
         
-                        반드시 JSON만 반환해.
-                        설명 절대 붙이지 마.
+                        규칙:
+                        - recommendedTime은 가장 추천하는 시간 1개만 작성해.
+                        - alternativeTime은 차선 시간 2개만 작성해.
+                        - reason은 추천 이유를 자연스럽게 설명해.
+                        - optionStats에는 시간별 가능한 인원 수를 넣어.
+                        - 없는 정보는 추측하지 마.
+                        - noticeText는 사용자에게 보여줄 짧은 안내 문구야.
+                        - noticeText는 친근하고 자연스럽게 작성해.
+                        - 딱딱한 공지 말투는 사용하지 마.
+                        - noticeText는 20~40자 정도로 작성해.
+                        - 반드시 JSON만 반환해.
+                        - JSON 외 설명 절대 붙이지 마.
         
                         형식:
                         {
