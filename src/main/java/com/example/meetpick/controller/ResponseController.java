@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/responses")
+@RequestMapping("/api/responses")
 public class ResponseController {
 
     private final ResponseService responseService;

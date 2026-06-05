@@ -9,10 +9,10 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/meetings")
+@RequestMapping("/api/meetings")
 public class MeetingController {
 
-    // Force re-deployment with comment change
+    // Version 2.0 - RESTORED /api FOR FRONTEND
     private final MeetingService meetingService;
 
     @PostMapping
