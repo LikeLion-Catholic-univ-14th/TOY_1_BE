@@ -10,12 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/result")
+@RequestMapping("/api/meetings")
 public class ResultController {
 
     private final ResultService resultService;
 
-    @GetMapping("/{meetingId}")
+    @GetMapping("/{meetingId}/result")
     public ResultResponseDTO getResult(
             @PathVariable String meetingId
     ) {
