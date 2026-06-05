@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/meetings")
+@RequestMapping("/meetings")
 public class MeetingController {
 
     // Force re-deployment with comment change
