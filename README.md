@@ -22,26 +22,20 @@
 ### 1. 모임 (Meeting)
 | 기능 | 메서드 | 엔드포인트 | 비고 |
 | :--- | :--- | :--- | :--- |
-| 모임 생성 | `POST` | `/api/meetings` | title, maxParticipants 전달 |
-| 단건 조회 | `GET` | `/api/meetings/{meetingId}` | |
-| 전체 목록 조회 | `GET` | `/api/meetings` | |
+| 모임 생성 | `POST` | `/meetings` | title, maxParticipants 전달 |
+| 단건 조회 | `GET` | `/meetings/{meetingId}` | |
+| 전체 목록 조회 | `GET` | `/meetings` | |
 
-### 2. 참여자 (Participant)
+### 2. 응답 (Response)
 | 기능 | 메서드 | 엔드포인트 | 비고 |
 | :--- | :--- | :--- | :--- |
-| 참여자 등록 | `POST` | `/api/participants` | meetingId, nickname 전달 |
-| 모임별 참여자 조회 | `GET` | `/api/participants/meeting/{meetingId}` | |
+| 일정 응답 제출 | `POST` | `/responses` | participantId, meetingId, rawText 전달 |
+| 모임별 응답 조회 | `GET` | `/responses/{meetingId}` | |
 
-### 3. 응답 (Response)
+### 3. AI 분석 결과 (AIResult)
 | 기능 | 메서드 | 엔드포인트 | 비고 |
 | :--- | :--- | :--- | :--- |
-| 일정 응답 제출 | `POST` | `/api/responses` | participantId, meetingId, rawText 전달 |
-| 모임별 응답 조회 | `GET` | `/api/responses/meeting/{meetingId}` | |
-
-### 4. AI 분석 결과 (AIResult)
-| 기능 | 메서드 | 엔드포인트 | 비고 |
-| :--- | :--- | :--- | :--- |
-| 모임별 결과 조회 | `GET` | `/api/ai-results/meeting/{meetingId}` | AI 분석 완료 후 결과 조회 |
+| 모임별 결과 조회 | `GET` | `/result/{meetingId}` | AI 분석 완료 후 결과 조회 |
 
 ## 향후 작업
 1. **Gemini AI API 연동**: `Response` 테이블의 `rawText`들을 수집하여 Gemini AI에 전달하고 분석 결과를 받아오는 로직 구현.

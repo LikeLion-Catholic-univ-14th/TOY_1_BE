@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/responses")
+@RequestMapping("/responses")
 public class ResponseController {
 
     private final ResponseService responseService;
@@ -18,7 +18,7 @@ public class ResponseController {
     public ResponseDTO submitResponse(@RequestBody ResponseDTO dto) {
         return responseService.submitResponse(dto);
     }
-    @GetMapping("/meeting/{meetingId}")
+    @GetMapping("/{meetingId}")
     public List<ResponseDTO> getResponses(@PathVariable String meetingId) {
         return responseService.getResponsesByMeeting(meetingId);
     }

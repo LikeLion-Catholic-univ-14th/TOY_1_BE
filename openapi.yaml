@@ -7,7 +7,7 @@ servers:
   - url: http://localhost:8080
     description: 로컬 서버
 paths:
-  /api/meetings:
+  /meetings:
     post:
       tags:
         - Meeting
@@ -37,7 +37,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MeetingResponse'
-  /api/meetings/{meetingId}:
+  /meetings/{meetingId}:
     get:
       tags:
         - Meeting
@@ -55,7 +55,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MeetingResponse'
-  /api/meetings/{meetingId}/result:
+  /result/{meetingId}:
     get:
       tags:
         - Result
@@ -74,7 +74,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResultResponse'
-  /api/responses:
+  /responses:
     post:
       tags:
         - Response
@@ -91,6 +91,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseDTO'
+  /responses/{meetingId}:
+    get:
+      tags:
+        - Response
+      summary: 모임별 응답 조회
+      parameters:
+        - name: meetingId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: 조회 성공
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ResponseDTO'
 components:
   schemas:
     MeetingRequest:
@@ -184,4 +204,3 @@ components:
               availableCount:
                 type: integer
                 example: 1
-

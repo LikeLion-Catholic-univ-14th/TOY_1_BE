@@ -33,7 +33,7 @@ public class ApiFlowIntegrationTest {
         meetingDTO.setTitle("Test Meeting");
         meetingDTO.setMaxParticipants(5);
 
-        MvcResult meetingResult = mockMvc.perform(post("/api/meetings")
+        MvcResult meetingResult = mockMvc.perform(post("/meetings")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(meetingDTO)))
                 .andExpect(status().isOk())
@@ -50,7 +50,7 @@ public class ApiFlowIntegrationTest {
         responseDTO.setNickname("Tester");
         responseDTO.setRawText("Available: Mon 10am-12pm");
 
-        mockMvc.perform(post("/api/responses")
+        mockMvc.perform(post("/responses")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(responseDTO)))
                 .andExpect(status().isOk())
