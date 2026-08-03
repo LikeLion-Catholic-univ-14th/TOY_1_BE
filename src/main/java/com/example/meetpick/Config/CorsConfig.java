@@ -20,7 +20,10 @@ public class CorsConfig {
                                 "https://meetpick-fe.vercel.app",
                                 "https://meetpick-fe-*.vercel.app",
                                 "https://meetpick_fe.vercel.app",
-                                "https://toy-project-*-hyeonji-s-projects.vercel.app"
+                                "https://toy-project-*-hyeonji-s-projects.vercel.app",
+                                "https://seoyeonlee.site",
+                                "https://www.seoyeonlee.site",
+                                "https://*.seoyeonlee.site"
                         )
                         .allowedMethods("*")
                         .allowedHeaders("*")
