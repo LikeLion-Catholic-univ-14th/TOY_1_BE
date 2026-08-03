@@ -12,6 +12,6 @@ spring:
       hibernate:
         format_sql: true
 gemini:
-  api-key: AIzaSyALorKmLm32A6V-l9SqHwuOTczIYj-Q1b0
+  api-key: {Gemini_API_KEY}
 server:
   port: 8080

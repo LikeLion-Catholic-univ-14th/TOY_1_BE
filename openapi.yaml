@@ -186,10 +186,10 @@ components:
           example: "6월 8일(월) 저녁 7시"
         reason:
           type: string
-          example: "가장 많은 인원(1명)이 참석 가능한 시간대입니다."
+          example: "가장 많은 인원(3명)이 참석 가능한 시간대입니다."
         noticeText:
           type: string
-          example: "모두가 모이기 좋은 월요일 저녁으로 확정될 것 같아요!"
+          example: "모두가 모이기 좋은 월요일 저녁 7시로 확정될 것 같아요!"
         isFallback:
           type: boolean
           example: false
@@ -203,4 +203,16 @@ components:
                 example: "6월 1일 (월) 저녁 7시"
               availableCount:
                 type: integer
-                example: 1
+                example: 3
+                option2:
+                  type: string
+                  example: "6월 8일 (월) 저녁 7시"
+                  avilableCount:
+                    type: integer
+                    example: 2
+                    option3:
+                      type: string
+                      example: "6월 15일 (월) 저녁 7시"
+                      availableCount:
+                        type: integer
+                        example: 1
