@@ -17,15 +17,10 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(List.of(
-                "http://localhost:*",
-                "https://*.vercel.app",
-                "https://seoyeonlee.site",
-                "https://www.seoyeonlee.site",
-                "https://*.seoyeonlee.site"
-        ));
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+        config.setAllowedOriginPatterns(List.of("*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        config.setAllowedHeaders(List.of("*"));
+        config.setExposedHeaders(List.of("*"));
 
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
